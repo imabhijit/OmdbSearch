@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -40,6 +41,7 @@ class MainFragment : Fragment() {
     lateinit var searchImage: ImageView
     lateinit var editText: EditText
     lateinit var movieService: MovieService
+    lateinit var noResults: TextView
     lateinit var retrofit: Retrofit
 
     override fun onCreateView(
@@ -68,6 +70,7 @@ class MainFragment : Fragment() {
         toolbar = rootView.findViewById(R.id.toolbar)
         searchImage = rootView.findViewById(R.id.searchImage)
         editText = rootView.findViewById(R.id.editText)
+        noResults = rootView.findViewById(R.id.noResultText)
     }
 
     fun populateMoviesByTitle(title: String) {
@@ -75,7 +78,7 @@ class MainFragment : Fragment() {
         result.enqueue(object : Callback<SearchResult> {
             override fun onResponse(call: Call<SearchResult>, response: Response<SearchResult>) {
                 if(response.isSuccessful) {
-                    Log.d("retro", response.body().toString())
+//                    Log.d("retro", response.body().toString())
                     val itemList: List<Movie> = if (response.body()?.movies.isNullOrEmpty()) listOf() else response.body()?.movies!!
                     showData(itemList)
                 } else {
@@ -91,6 +94,7 @@ class MainFragment : Fragment() {
     }
 
     fun showData(movies: List<Movie>){
+        noResults.text = if (movies.isEmpty()) getString(R.string.no_results_found) else String()
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = MovieAdapter(movies)
@@ -103,10 +107,11 @@ class MainFragment : Fragment() {
             timer = Timer()
             timer.schedule(object : TimerTask() {
                 override fun run() {
-                    if(s.toString().length < 3) {
+                    if(s.toString().length in 1..2) {
                         return
                     }
-                    populateMoviesByTitle(s.toString())
+                    val searchTerm = if (s.toString().isEmpty()) "Man" else s.toString()
+                    populateMoviesByTitle(searchTerm)
                 }
             }, 200)
         }
