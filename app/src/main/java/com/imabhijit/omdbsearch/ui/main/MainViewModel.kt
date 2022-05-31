@@ -1,5 +1,6 @@
 package com.imabhijit.omdbsearch.ui.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.imabhijit.omdbsearch.model.SearchResult
 import com.imabhijit.omdbsearch.service.MovieService
@@ -31,7 +32,7 @@ class MainViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<SearchResult>, t: Throwable) {
-                println(t.message)
+                t.message?.let { Log.e("onGetFailure", it) }
             }
         })
     }
