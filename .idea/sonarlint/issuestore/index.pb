@@ -22,3 +22,9 @@ F
 app/proguard-rules.pro,9\e\9e08934d811afe28fbc77aaa3c0d747b94348db9
 m
 =app/src/test/java/com/imabhijit/omdbsearch/ExampleUnitTest.kt,d\0\d0222e26be45d29c3a7c5b22b48b7f2dc7916495
+@
+app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
+p
+@app/src/main/java/com/imabhijit/omdbsearch/model/SearchResult.kt,f\9\f9c084d1eeda54d328165b04f123d68b87b5d755
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
