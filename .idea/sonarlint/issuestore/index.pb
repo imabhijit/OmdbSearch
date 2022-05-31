@@ -28,3 +28,5 @@ p
 @app/src/main/java/com/imabhijit/omdbsearch/model/SearchResult.kt,f\9\f9c084d1eeda54d328165b04f123d68b87b5d755
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+j
+:app/src/main/java/com/imabhijit/omdbsearch/MainActivity.kt,c\6\c6e62d3b9470c00981a408f9cfcbe1093ca508fc
