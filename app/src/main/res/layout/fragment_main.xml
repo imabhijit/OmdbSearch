@@ -39,6 +39,8 @@
                 android:layout_marginRight="32dp"
                 android:isScrollContainer="true"
                 android:scrollHorizontally="true"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
                 tools:text="Abhi" />
 
             <ImageView

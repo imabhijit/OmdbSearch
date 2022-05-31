@@ -120,5 +120,4 @@ class MainFragment : Fragment() {
             timer.cancel()
         }
     }
-
 }
