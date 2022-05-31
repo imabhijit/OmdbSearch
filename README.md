@@ -14,3 +14,6 @@ interface MovieService {
 
 ![OmdbSearchDemo](https://user-images.githubusercontent.com/25406254/171297693-cf674f6d-bd49-4498-ac2a-46ca1810b719.gif)
 
+Cheers 🍻
+
+Abhijit Gupta
