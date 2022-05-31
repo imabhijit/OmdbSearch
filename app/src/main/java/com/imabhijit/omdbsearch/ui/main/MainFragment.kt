@@ -1,14 +1,20 @@
 package com.imabhijit.omdbsearch.ui.main
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.imabhijit.omdbsearch.MainActivity
 import com.imabhijit.omdbsearch.R
 import com.imabhijit.omdbsearch.model.Movie
 import com.imabhijit.omdbsearch.model.SearchResult
@@ -19,6 +25,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+
 
 class MainFragment : Fragment() {
 
@@ -28,6 +36,9 @@ class MainFragment : Fragment() {
     }
 
     lateinit var recyclerView: RecyclerView
+    lateinit var toolbar: Toolbar
+    lateinit var searchImage: ImageView
+    lateinit var editText: EditText
     lateinit var movieService: MovieService
     lateinit var retrofit: Retrofit
 
@@ -36,7 +47,8 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-        recyclerView = rootView.findViewById(R.id.recyclerView)
+        initializeComponents(rootView)
+
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -44,8 +56,18 @@ class MainFragment : Fragment() {
 
         movieService = retrofit.create(MovieService::class.java)
 
+        val main = activity as MainActivity
+        main.setSupportActionBar(toolbar)
         populateMoviesByTitle("Man")
+        editText.addTextChangedListener(searchTextWatcher)
         return rootView
+    }
+
+    private fun initializeComponents(rootView: View) {
+        recyclerView = rootView.findViewById(R.id.recyclerView)
+        toolbar = rootView.findViewById(R.id.toolbar)
+        searchImage = rootView.findViewById(R.id.searchImage)
+        editText = rootView.findViewById(R.id.editText)
     }
 
     fun populateMoviesByTitle(title: String) {
@@ -54,7 +76,8 @@ class MainFragment : Fragment() {
             override fun onResponse(call: Call<SearchResult>, response: Response<SearchResult>) {
                 if(response.isSuccessful) {
                     Log.d("retro", response.body().toString())
-                    showData(response.body()!!.movies)
+                    val itemList: List<Movie> = if (response.body()?.movies.isNullOrEmpty()) listOf() else response.body()?.movies!!
+                    showData(itemList)
                 } else {
                     Log.e("retro", response.raw().headers().toString())
                 }
@@ -71,6 +94,25 @@ class MainFragment : Fragment() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = MovieAdapter(movies)
+        }
+    }
+
+    var searchTextWatcher: TextWatcher = object : TextWatcher {
+        var timer = Timer()
+        override fun afterTextChanged(s: Editable) {
+            timer = Timer()
+            timer.schedule(object : TimerTask() {
+                override fun run() {
+                    if(s.toString().length < 3) {
+                        return
+                    }
+                    populateMoviesByTitle(s.toString())
+                }
+            }, 200)
+        }
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            timer.cancel()
         }
     }
 
