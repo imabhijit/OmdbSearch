@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.imabhijit.omdbsearch.R
@@ -23,9 +24,12 @@ class MainFragment : Fragment() {
 
     companion object {
         fun newInstance() = MainFragment()
+        const val BASE_URL = "https://www.omdbapi.com/"
     }
 
     lateinit var recyclerView: RecyclerView
+    lateinit var movieService: MovieService
+    lateinit var retrofit: Retrofit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,28 +37,32 @@ class MainFragment : Fragment() {
     ): View {
         val rootView = inflater.inflate(R.layout.fragment_main, container, false)
         recyclerView = rootView.findViewById(R.id.recyclerView)
-        populateMoviesByTitle("see")
+        retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        movieService = retrofit.create(MovieService::class.java)
+
+        populateMoviesByTitle("Man")
         return rootView
     }
 
     fun populateMoviesByTitle(title: String) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(R.string.BASE_URL.toString())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val movieService = retrofit.create(MovieService::class.java)
         val result = movieService.getMoviesByTitle(title)
-
         result.enqueue(object : Callback<SearchResult> {
             override fun onResponse(call: Call<SearchResult>, response: Response<SearchResult>) {
                 if(response.isSuccessful) {
+                    Log.d("retro", response.body().toString())
                     showData(response.body()!!.movies)
+                } else {
+                    Log.e("retro", response.raw().headers().toString())
                 }
             }
 
             override fun onFailure(call: Call<SearchResult>, t: Throwable) {
                 t.message?.let { Log.e("onGetFailure", it) }
+                Toast.makeText(activity, t.message, Toast.LENGTH_SHORT).show()
             }
         })
     }
