@@ -2,6 +2,7 @@ package com.imabhijit.omdbsearch.ui.main
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.imabhijit.omdbsearch.R
 import com.imabhijit.omdbsearch.model.SearchResult
 import com.imabhijit.omdbsearch.service.MovieService
 import com.squareup.picasso.Picasso
@@ -15,7 +16,7 @@ class MainViewModel : ViewModel() {
 
     fun getMoviesByTitle(title: String) {
         val retrofit = Retrofit.Builder()
-            .baseUrl(MovieService.BASE_URL)
+            .baseUrl(R.string.BASE_URL.toString())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

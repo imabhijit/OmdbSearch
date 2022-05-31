@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OmdbSearch</string>
+    <string name="BASE_URL">https://www.omdbapi.com/</string>
+    <string name="API_KEY">code</string>
 </resources>

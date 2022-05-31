@@ -26,7 +26,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_toEndOf="@+id/poster"
-            android:text="Abhi Do Good"
+            tools:text="Abhi Do Good"
             android:textAllCaps="true"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -39,7 +39,7 @@
             android:layout_marginLeft="10dp"
             android:layout_toEndOf="@+id/poster"
             android:layout_below="@+id/title"
-            android:text="2022" />
+            tools:text="2022" />
 
         <Button
             android:id="@+id/watch_button"
@@ -49,6 +49,6 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_toEndOf="@+id/poster"
-            android:text="Watch" />
+            tools:text="Watch" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
